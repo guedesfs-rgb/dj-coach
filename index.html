@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DJ Coach</title>
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <header>
+    <strong class="brand">🎧 DJ Coach</strong>
+    <span id="midi" class="pill">Conectando MIDI…</span>
+    <label>Lição <select id="lesson"></select></label>
+    <button id="start">Começar</button>
+    <label>BPM <input id="bpm" type="number" value="124" min="60" max="200"></label>
+    <button id="compact" title="Esconde a controladora e deixa só a pista e o log">Modo compacto</button>
+  </header>
+
+  <main>
+    <section class="coach">
+      <div class="card">
+        <div class="row">
+          <span id="lessonName" class="muted"></span>
+          <span class="beat"><i></i><i></i><i></i><i></i> <small id="bar"></small></span>
+        </div>
+        <div id="stepNo" class="muted"></div>
+        <div id="stepText" class="big"></div>
+        <div id="stepHint" class="hint"></div>
+        <div id="stepMeta" class="meta"></div>
+      </div>
+      <canvas id="lane"></canvas>
+    </section>
+
+    <section class="device">
+      <svg id="ctl" viewBox="0 0 1000 450" aria-label="Numark Mixtrack Pro FX"></svg>
+      <p class="muted small">Sem a controladora? Clique e arraste nos controles do desenho para simular.</p>
+    </section>
+  </main>
+
+  <aside class="logbox">
+    <div class="row">
+      <strong>O que você fez</strong>
+      <span>
+        <label class="small"><input id="raw" type="checkbox"> MIDI cru</label>
+        <button id="clear" class="small">limpar</button>
+      </span>
+    </div>
+    <div id="log"></div>
+  </aside>
+
+  <script src="src/mixtrack-pro-fx.js"></script>
+  <script src="src/lessons.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
