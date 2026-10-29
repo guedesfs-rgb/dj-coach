@@ -15,7 +15,7 @@
     "mac": {
       "category": "public.app-category.music",
       "target": "dmg",
-      "identity": null
+      "identity": "-"
     }
   },
   "devDependencies": {
