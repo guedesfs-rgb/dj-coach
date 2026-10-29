@@ -1,6 +1,9 @@
 // Só no app de Mac: a janela deixa os cliques passarem para o Serato,
 // exceto quando o mouse está sobre uma área .interactive (menus e botões do DJ Coach).
+if (!window.overlay) document.querySelector("#quit").style.display = "none";
 if (window.overlay) {
+  document.querySelector("#quit").onclick = () => window.overlay.quit();
+  window.overlay.onNav((dir) => (dir < 0 ? prevStep() : nextStep()));
   document.querySelectorAll(".interactive").forEach((el) => {
     el.addEventListener("mouseenter", () => window.overlay.setClickThrough(false));
     el.addEventListener("mouseleave", () => window.overlay.setClickThrough(true));

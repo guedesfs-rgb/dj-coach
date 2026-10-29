@@ -17,7 +17,15 @@ O DJ Coach abre como uma camada transparente, sempre por cima do Serato:
 - **Embaixo à direita:** a controladora com o controle a mexer piscando.
 
 Decks e ondas do Serato ficam livres, e os cliques passam direto para o Serato
-(só os menus do DJ Coach são clicáveis). **⌘⇧D** mostra/esconde o overlay.
+(só os menus do DJ Coach são clicáveis).
+
+| Atalho | O que faz |
+| --- | --- |
+| ⌘⇧D | Mostra/esconde o overlay |
+| ⌘⇧← / ⌘⇧→ | Volta um passo / pula o passo |
+| ⌘⇧Q | Fecha o DJ Coach (também pelo ✕ no overlay ou pelo 🎧 na barra de menus) |
+
+Os atalhos funcionam mesmo com o Serato em foco.
 
 ### Instalar
 

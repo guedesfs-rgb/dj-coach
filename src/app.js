@@ -203,6 +203,7 @@ function input(ev) {
     view.flashT = setTimeout(() => view.g.classList.remove("flash"), 160);
   }
   logInput(ev);
+  waitInput = false;
   evaluate(ev);
   window.dispatchEvent(new CustomEvent("dj-input", { detail: ev }));
 }
@@ -236,6 +237,7 @@ function setupMidi() {
 // ---------- Motor de lições ----------
 
 let L = null, idx = 0, t0 = null;
+let waitInput = false; // depois de voltar um passo, espera você mexer em algo antes de dar o passo como feito
 const rampErr = {};
 
 const bpm = () => Math.max(60, Math.min(200, +$("#bpm").value || 124));
@@ -249,14 +251,51 @@ function startLesson(key) {
   t0 = null;
   for (const k in rampErr) delete rampErr[k];
   L.steps.forEach((s) => { s.state = null; s.grade = null; });
+  waitInput = false;
   log("▶ Lição: " + L.name, "lesson");
   renderStep();
   evaluate(null);
 }
 
+// Volta ou avança para o passo i. Passos cronometrados ganham 4 batidas de contagem.
+function goTo(i) {
+  if (!L || !L.steps.length) return;
+  idx = Math.max(0, Math.min(L.steps.length - 1, i));
+  L.steps.forEach((s, j) => {
+    if (j >= idx) { s.state = null; s.grade = null; delete rampErr[j]; }
+  });
+  const s = L.steps[idx];
+  const startIdx = L.steps.findIndex((x) => x.start);
+  if (startIdx >= 0 && idx <= startIdx) t0 = null;
+  else if (s.at !== undefined) t0 = performance.now() - ((s.at - 4) * 60000) / bpm();
+  waitInput = true;
+  log(`↩ Passo ${idx + 1}: ${s.t}`, "lesson");
+  renderStep();
+}
+
+function prevStep() {
+  goTo(idx - 1);
+}
+
+function nextStep() {
+  const s = cur();
+  if (!s) return;
+  if (idx + 1 >= L.steps.length) {
+    s.state = "skip";
+    s.grade = "pulado";
+    idx++;
+    renderStep();
+    return;
+  }
+  goTo(idx + 1);
+  L.steps[idx - 1].state = "skip";
+  L.steps[idx - 1].grade = "pulado";
+}
+
 function evaluate(ev) {
   const s = cur();
   if (!s) return;
+  if (waitInput && !ev) return;
   if (s.at !== undefined) {
     const b = beatNow();
     if (b == null || b < s.at - 4) return;
@@ -450,6 +489,13 @@ for (const [k, l] of Object.entries(LESSONS)) sel.add(new Option(l.name, k));
 $("#start").onclick = () => startLesson(sel.value);
 $("#clear").onclick = () => { logEl.innerHTML = ""; lastLog = null; };
 $("#compact").onclick = () => document.body.classList.toggle("compact");
+$("#prev").onclick = prevStep;
+$("#next").onclick = nextStep;
+document.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+  if (e.key === "ArrowLeft") prevStep();
+  if (e.key === "ArrowRight") nextStep();
+});
 
 setupMidi();
 startLesson("tour");
