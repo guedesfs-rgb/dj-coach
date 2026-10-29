@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --mac dmg --arm64"
+    "dist": "electron-builder --mac dmg --arm64 --publish never"
   },
   "build": {
     "appId": "com.guedesfs.djcoach",
