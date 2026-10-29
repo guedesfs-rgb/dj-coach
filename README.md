@@ -7,14 +7,32 @@ Um treinador de mixagem estilo *Guitar Hero* para a **Numark Mixtrack Pro FX** +
 - **Log de ações** (canto superior direito): tudo o que você faz na controladora aparece em português ("Grave — Deck A: −100% (cortado)").
 - **Nota em cada passo:** "no tempo 🎯", "suave 👌", "rápido demais", "atrasado"…
 
-## Como usar (Mac)
+## App de Mac (overlay por cima do Serato)
 
-1. Ligue a Mixtrack Pro FX no USB e abra o Serato normalmente.
-2. Abra o `index.html` no **Google Chrome** e aceite a permissão de MIDI.
-3. O selo no topo deve ficar verde: "Controladora: Mixtrack Pro FX ✓".
-4. Escolha a lição, digite o BPM que o Serato mostra e clique em **Começar**.
+O DJ Coach abre como uma camada transparente, sempre por cima do Serato:
 
-Sem a controladora, dá para testar clicando e arrastando nos controles do desenho.
+- **Canto superior direito:** log do que você fez.
+- **Esquerda (por cima das pastas):** a pista de batidas.
+- **Embaixo (por cima da lista de músicas):** o próximo movimento, a lição e o BPM.
+- **Embaixo à direita:** a controladora com o controle a mexer piscando.
+
+Decks e ondas do Serato ficam livres, e os cliques passam direto para o Serato
+(só os menus do DJ Coach são clicáveis). **⌘⇧D** mostra/esconde o overlay.
+
+### Instalar
+
+1. Em **Actions → Build Mac app**, abra a execução mais recente e baixe `DJ-Coach-mac`.
+2. Abra o `.dmg` e arraste o **DJ Coach** para Aplicativos.
+3. Como o app não é assinado pela Apple, rode uma vez no Terminal:
+   `xattr -cr "/Applications/DJ Coach.app"`
+4. Ligue a Mixtrack Pro FX, abra o Serato e depois o DJ Coach.
+
+Para rodar a partir do código: `npm install && npm start`.
+
+## Versão de navegador
+
+Abra o `index.html` no **Google Chrome** e aceite a permissão de MIDI. Sem a
+controladora, dá para testar clicando e arrastando nos controles do desenho.
 
 > No macOS o Serato e o DJ Coach escutam a controladora ao mesmo tempo, sem conflito.
 
@@ -37,8 +55,9 @@ usando o BPM informado.
 | `src/mixtrack-pro-fx.js` | Mapa MIDI da controladora |
 | `src/lessons.js` | Lições e passos (fácil de criar novas) |
 | `src/app.js` | Desenho da controladora, log, pista e motor de lições |
+| `overlay.html`, `src/overlay.css` | Layout do overlay por cima do Serato |
+| `electron/` | App de Mac (janela transparente, sempre por cima, que deixa os cliques passarem) |
 
 ## Próximos passos
 
-- Overlay transparente por cima do Serato (Electron).
 - Integração com o Mixxx para ler BPM e posição da música automaticamente.

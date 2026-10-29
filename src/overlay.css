@@ -1,0 +1,35 @@
+/* Layout do overlay por cima do Serato.
+   Pensado para as áreas que você menos olha durante a mixagem:
+   pastas (esquerda) e lista de músicas (embaixo). Decks e ondas ficam livres. */
+@import url("style.css");
+
+html, body { background: transparent; overflow: hidden; height: 100%; }
+body { pointer-events: none; }
+.interactive, .interactive * { pointer-events: auto; }
+
+.logbox { top: 8px; right: 8px; width: 290px; max-height: 32vh; background: rgba(13, 15, 20, 0.86); }
+.logbox #log .ev:nth-child(n + 7) { display: none; }
+.logbox .ev { font-size: 12px; padding: 3px 8px; }
+
+#lane {
+  position: fixed; left: 8px; bottom: 8px; width: 230px; height: 56vh;
+  border-radius: 10px; border: 1px solid var(--line); opacity: 0.97;
+}
+
+.card {
+  position: fixed; left: 248px; bottom: 8px; width: 460px; min-height: 0;
+  background: rgba(13, 15, 20, 0.9); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.bar-top { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding-bottom: 6px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.bar-top select { max-width: 190px; }
+.bar-top button, .bar-top select, .bar-top input { padding: 2px 8px; font-size: 13px; }
+.card .big { font-size: 22px; }
+
+.device {
+  position: fixed; right: 8px; bottom: 8px; width: min(520px, calc(100vw - 730px));
+}
+.device svg { background: rgba(22, 26, 34, 0.9); }
+.device svg .ctl { pointer-events: none; }
+
+body.compact .device { display: none; }
