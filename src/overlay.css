@@ -33,3 +33,10 @@ body { pointer-events: none; }
 .device svg .ctl { pointer-events: none; }
 
 body.compact .device { display: none; }
+
+/* Escolhendo música: tudo que fica por cima da lista sai da frente. */
+#lane, .device, .card, .card > * { transition: opacity 0.25s; }
+body.browsing #lane, body.browsing .device { opacity: 0.05; }
+body.browsing .card { bottom: auto; top: 38.5vh; left: 420px; width: 440px; padding: 6px 12px; }
+body.browsing .card > :not(#stepText) { display: none; }
+body.browsing .card .big { font-size: 16px; margin: 0; }

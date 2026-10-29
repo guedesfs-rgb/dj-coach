@@ -6,3 +6,22 @@ if (window.overlay) {
     el.addEventListener("mouseleave", () => window.overlay.setClickThrough(true));
   });
 }
+
+// Sai da frente da lista de músicas enquanto você escolhe a próxima:
+// girar/apertar o BROWSE (ou um passo que pede para escolher música) deixa
+// a pista e a controladora quase invisíveis e reduz o cartão a uma linha.
+let browseTimer = null;
+let stepNeedsBrowse = false;
+const setBrowsing = () =>
+  document.body.classList.toggle("browsing", stepNeedsBrowse || browseTimer !== null);
+
+window.addEventListener("dj-input", (e) => {
+  if (!/^browse/.test(e.detail.id)) return;
+  clearTimeout(browseTimer);
+  browseTimer = setTimeout(() => { browseTimer = null; setBrowsing(); }, 5000);
+  setBrowsing();
+});
+window.addEventListener("dj-step", (e) => {
+  stepNeedsBrowse = !!(e.detail && e.detail.hl.includes("browse"));
+  setBrowsing();
+});

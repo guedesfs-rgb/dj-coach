@@ -204,6 +204,7 @@ function input(ev) {
   }
   logInput(ev);
   evaluate(ev);
+  window.dispatchEvent(new CustomEvent("dj-input", { detail: ev }));
 }
 
 // ---------- MIDI ----------
@@ -288,6 +289,7 @@ function complete(s) {
 }
 
 function renderStep() {
+  window.dispatchEvent(new CustomEvent("dj-step", { detail: cur() }));
   document.querySelectorAll(".ctl.hl").forEach((g) => g.classList.remove("hl"));
   arrow.setAttribute("x", -100);
   const s = cur();
