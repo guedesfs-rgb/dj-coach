@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>DJ Coach — Overlay</title>
+  <link rel="stylesheet" href="src/overlay.css">
+</head>
+<body>
+  <!-- Direita, por cima das colunas da lista de músicas: o que você fez -->
+  <aside class="logbox">
+    <div class="row interactive">
+      <strong>O que você fez</strong>
+      <span>
+        <label class="small"><input id="raw" type="checkbox"> MIDI</label>
+        <button id="clear" class="small">limpar</button>
+      </span>
+    </div>
+    <div id="log"></div>
+  </aside>
+
+  <!-- Esquerda (por cima das pastas do Serato): pista de batidas -->
+  <canvas id="lane"></canvas>
+
+  <!-- Embaixo, no meio (por cima da lista de músicas): o próximo movimento -->
+  <section class="card">
+    <div class="bar-top interactive">
+      <strong>🎧 DJ Coach</strong>
+      <select id="lesson"></select>
+      <button id="start">Começar</button>
+      <label>BPM <input id="bpm" type="number" value="124" min="60" max="200"></label>
+      <button id="prev" title="Voltar um passo (⌘⇧←)">◀</button>
+      <button id="next" title="Pular passo (⌘⇧→)">▶</button>
+      <button id="compact" title="Mostrar/esconder o desenho da controladora">🎛</button>
+      <button id="quit" title="Fechar o DJ Coach (⌘⇧Q)">✕</button>
+    </div>
+    <div class="row">
+      <span id="midi" class="pill">Conectando MIDI…</span>
+      <span class="beat"><i></i><i></i><i></i><i></i> <small id="bar"></small></span>
+    </div>
+    <div class="muted small"><span id="lessonName"></span> · <span id="stepNo"></span></div>
+    <div id="stepText" class="big"></div>
+    <div id="stepHint" class="hint"></div>
+    <div id="stepMeta" class="meta"></div>
+  </section>
+
+  <!-- Embaixo, à direita: a controladora com o controle a mexer piscando -->
+  <section class="device">
+    <svg id="ctl" viewBox="0 0 1000 450" aria-label="Numark Mixtrack Pro FX"></svg>
+  </section>
+
+  <script src="src/mixtrack-pro-fx.js"></script>
+  <script src="src/lessons.js"></script>
+  <script src="src/app.js"></script>
+  <script src="src/tips.js"></script>
+  <script src="src/overlay.js"></script>
+</body>
+</html>
