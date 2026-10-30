@@ -69,8 +69,8 @@ const LESSONS = {
   },
 
   livre: {
-    name: "Modo livre (só o log)",
-    intro: "Mixe à vontade. Tudo o que você fizer aparece no log ao lado.",
+    name: "Modo livre (com dicas)",
+    intro: "Mixe à vontade. Tudo o que você fizer aparece no log, e as dicas aparecem aqui quando algo merecer atenção.",
     steps: [],
   },
 };

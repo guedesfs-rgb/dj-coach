@@ -478,6 +478,7 @@ function tick() {
   dots.forEach((dot, i) => dot.classList.toggle("on", i === active));
   $("#bar").textContent = b == null ? "" : `compasso ${Math.floor(b / 4) + 1}`;
 
+  if (typeof tipsTick === "function") tipsTick();
   drawLane(b);
   requestAnimationFrame(tick);
 }

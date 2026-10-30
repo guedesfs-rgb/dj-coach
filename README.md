@@ -49,7 +49,7 @@ controladora, dá para testar clicando e arrastando nos controles do desenho.
 1. **Conhecendo a controladora:** play, volume, crossfader, grave, filtro, load e pré-escuta.
 2. **Primeira transição (troca de grave):** entrada do Deck B em 16 batidas, troca de grave e saída do Deck A.
 3. **Saída com filtro:** filtro abafando o Deck A e corte seco no compasso.
-4. **Modo livre:** só o log.
+4. **Modo livre:** log + dicas na hora (graves embolando, entrada sem SYNC, filtro esquecido, crossfader fechando um deck, dois decks no máximo há muito tempo).
 
 ## Como funciona
 
