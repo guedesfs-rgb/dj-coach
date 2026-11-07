@@ -17,7 +17,7 @@ O DJ Coach abre como uma camada transparente, sempre por cima do Serato:
 - **Embaixo à direita:** a controladora com o controle a mexer piscando.
 
 Decks e ondas do Serato ficam livres, e os cliques passam direto para o Serato
-(só os menus do DJ Coach são clicáveis).
+(só os menus do DJ Coach são clicáveis). Passe o mouse em cima de qualquer painel e ele fica transparente, para você ver e usar a lista e a busca do Serato por baixo.
 
 | Atalho | O que faz |
 | --- | --- |

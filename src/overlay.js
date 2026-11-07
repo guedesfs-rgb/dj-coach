@@ -28,3 +28,17 @@ window.addEventListener("dj-step", (e) => {
   stepNeedsBrowse = !!(e.detail && e.detail.hl.includes("browse"));
   setBrowsing();
 });
+
+// Espiar por baixo: com o mouse em cima de um painel (fora dos botões do DJ Coach),
+// ele fica quase transparente para você ver e usar a lista e a busca do Serato.
+// Os movimentos do mouse chegam aqui mesmo com os cliques passando para o Serato.
+const PANELS = [".logbox", "#lane", ".card", ".device"].map((s) => document.querySelector(s));
+window.addEventListener("mousemove", (e) => {
+  const overButtons = e.target.closest && e.target.closest(".interactive");
+  for (const el of PANELS) {
+    const r = el.getBoundingClientRect();
+    const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    el.classList.toggle("peek", inside && !overButtons);
+  }
+});
+document.documentElement.addEventListener("mouseleave", () => PANELS.forEach((el) => el.classList.remove("peek")));
