@@ -202,6 +202,11 @@ function input(ev) {
     clearTimeout(view.flashT);
     view.flashT = setTimeout(() => view.g.classList.remove("flash"), 160);
   }
+  if (ev.kind === "press" && !ev.shift) {
+    const D = ev.id[0];
+    if (ev.id === D + ".play") playing[D] = !playing[D];
+    if (ev.id === D + ".cue") playing[D] = false;
+  }
   logInput(ev);
   waitInput = false;
   evaluate(ev);
@@ -237,7 +242,20 @@ function setupMidi() {
 // ---------- Motor de lições ----------
 
 let L = null, idx = 0, t0 = null;
-let waitInput = false; // depois de voltar um passo, espera você mexer em algo antes de dar o passo como feito
+let waitInput = false;
+let relaxed = true; // sem pressa: passos cronometrados esperam você em vez de "passar do tempo"
+let dirOverride = null; // deck que está tocando, escolhido no botão ⇄
+const playing = { A: false, B: false }; // pelo PLAY/CUE apertados na controladora
+
+// Qual deck está tocando agora (OUT). O outro é o que vai entrar (IN).
+function detectOut() {
+  if (dirOverride) return dirOverride;
+  if (playing.A !== playing.B) return playing.A ? "A" : "B";
+  const va = S["mixA.vol"], vb = S["mixB.vol"];
+  if (va !== undefined && vb !== undefined && va !== vb) return va > vb ? "A" : "B";
+  if (va === undefined && vb !== undefined && vb > 60) return "B";
+  return "A";
+} // depois de voltar um passo, espera você mexer em algo antes de dar o passo como feito
 const rampErr = {};
 
 const bpm = () => Math.max(60, Math.min(200, +$("#bpm").value || 124));
@@ -247,12 +265,19 @@ const cur = () => (L ? L.steps[idx] : null);
 function startLesson(key) {
   L = LESSONS[key];
   sel.value = key;
+  if (L.build) {
+    const OUT = detectOut(), IN = OUT === "A" ? "B" : "A";
+    L.steps = L.build(OUT, IN);
+    L.introText = L.intro(OUT, IN);
+    L.dir = OUT;
+  } else L.introText = L.intro;
+  $("#swap").textContent = L.build ? `${L.dir} → ${L.dir === "A" ? "B" : "A"}` : "⇄";
   idx = 0;
   t0 = null;
   for (const k in rampErr) delete rampErr[k];
   L.steps.forEach((s) => { s.state = null; s.grade = null; });
   waitInput = false;
-  log("▶ Lição: " + L.name, "lesson");
+  log("▶ Lição: " + L.name + (L.build ? ` (Deck ${L.dir} tocando)` : ""), "lesson");
   renderStep();
   evaluate(null);
 }
@@ -323,8 +348,18 @@ function complete(s) {
   s.grade = grade;
   log(`✓ ${s.t}${grade ? " — " + grade : ""}`, "ok");
   idx++;
+  giveRoom();
   renderStep();
   evaluate(null);
+}
+
+// Sem pressa: se o próximo passo cronometrado está a menos de 4 batidas, empurra o
+// relógio em compassos inteiros (para continuar no "1") até sobrar tempo para ler e fazer.
+function giveRoom() {
+  const nx = cur(), b = beatNow();
+  if (!relaxed || !nx || nx.at === undefined || b == null) return;
+  const lack = 4 - (nx.at - b);
+  if (lack > 0) t0 += (Math.ceil(lack / 4) * 4 * 60000) / bpm();
 }
 
 function renderStep() {
@@ -338,10 +373,12 @@ function renderStep() {
     if (!L.steps.length) {
       $("#stepNo").textContent = "Modo livre";
       $("#stepText").textContent = "Mixe à vontade";
-      $("#stepHint").textContent = L.intro;
+      $("#stepHint").textContent = L.introText;
+      $("#stepNext").textContent = "";
     } else {
       const done = L.steps.filter((x) => x.state === "done").length;
       $("#stepNo").textContent = "Lição concluída 🎉";
+      $("#stepNext").textContent = "";
       $("#stepText").textContent = `${done} de ${L.steps.length} passos`;
       $("#stepHint").innerHTML = L.steps
         .filter((x) => x.at !== undefined)
@@ -352,7 +389,9 @@ function renderStep() {
   }
   $("#stepNo").textContent = `Passo ${idx + 1} de ${L.steps.length}`;
   $("#stepText").textContent = s.t;
-  $("#stepHint").textContent = idx === 0 && L.intro ? L.intro + " " + s.h : s.h;
+  $("#stepHint").textContent = idx === 0 && L.introText ? L.introText + " " + s.h : s.h;
+  const nx = L.steps[idx + 1];
+  $("#stepNext").textContent = nx ? "Depois: " + nx.t : "";
   s.hl.forEach((id) => VIEW[id] && VIEW[id].g.classList.add("hl"));
   const first = CTL[s.hl[s.hl.length - 1]];
   if (first && s.dir) {
@@ -446,7 +485,7 @@ function tick() {
       e.sum += Math.abs(S[s.ramp.id] - expected) / 127;
       e.n++;
     }
-    if (b > s.at + s.len + 6) {
+    if (!relaxed && b > s.at + s.len + 6) {
       s.state = "miss";
       s.grade = "perdeu";
       log(`✗ ${s.t} — passou do tempo`, "miss");
@@ -467,8 +506,10 @@ function tick() {
       const p = Math.min(1, Math.max(0, (b - s2.at) / s2.len));
       const exp = s2.ramp.from + (s2.ramp.to - s2.ramp.from) * p;
       const v = S[s2.ramp.id] ?? 0;
-      meta.innerHTML = `<div class="bar"><div class="fill" style="width:${(v / 127) * 100}%"></div><div class="target" style="left:${(exp / 127) * 100}%"></div></div>`;
-    } else meta.innerHTML = `<span class="count now">AGORA!</span>`;
+      meta.innerHTML = `<div class="bar"><div class="fill" style="width:${(v / 127) * 100}%"></div><div class="target" style="left:${(exp / 127) * 100}%"></div></div>${relaxed && b > s2.at + s2.len + 2 ? "<small>Pode terminar o movimento agora, sem pressa.</small>" : ""}`;
+    } else meta.innerHTML = relaxed && b > s2.at + s2.len + 2
+      ? `<span class="count now">Pode fazer agora</span> sem pressa`
+      : `<span class="count now">AGORA!</span>`;
   } else if (s2 && s2.hl.some((id) => CTL[id] && /knob|fader/.test(CTL[id].type) && S[id] === undefined)) {
     meta.textContent = "Dica: mexa um pouco o controle para o app ler a posição dele.";
   } else meta.textContent = "";
@@ -487,10 +528,21 @@ function tick() {
 
 const sel = $("#lesson");
 for (const [k, l] of Object.entries(LESSONS)) sel.add(new Option(l.name, k));
-$("#start").onclick = () => startLesson(sel.value);
+$("#start").onclick = () => { dirOverride = null; startLesson(sel.value); };
 $("#clear").onclick = () => { logEl.innerHTML = ""; lastLog = null; };
 $("#compact").onclick = () => document.body.classList.toggle("compact");
 $("#prev").onclick = prevStep;
+$("#swap").onclick = () => {
+  if (!L || !L.build) return;
+  dirOverride = L.dir === "A" ? "B" : "A";
+  startLesson(sel.value);
+};
+$("#relaxed").onclick = () => {
+  relaxed = !relaxed;
+  $("#relaxed").classList.toggle("on", relaxed);
+  log(relaxed ? "🐢 Sem pressa: os passos esperam você" : "⏱ Modo desafio: os passos passam no tempo", "lesson");
+};
+$("#relaxed").classList.toggle("on", relaxed);
 $("#next").onclick = nextStep;
 document.addEventListener("keydown", (e) => {
   if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;

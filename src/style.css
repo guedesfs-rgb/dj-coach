@@ -34,6 +34,9 @@ main { display: grid; grid-template-columns: 380px 1fr; gap: 16px; padding: 16px
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; min-height: 230px; }
 .big { font-size: 20px; font-weight: 700; margin: 4px 0 6px; color: var(--hl); }
 .hint { color: #cbd2e0; }
+.next { margin-top: 6px; color: var(--mut); font-size: 13px; }
+.next:empty { display: none; }
+#relaxed.on, #swap { border-color: var(--hl); color: var(--hl); }
 .meta { margin-top: 10px; min-height: 28px; color: var(--mut); }
 .count { font-size: 22px; font-weight: 800; color: var(--txt); }
 .count.now { color: var(--hl); }

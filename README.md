@@ -47,8 +47,13 @@ controladora, dá para testar clicando e arrastando nos controles do desenho.
 ## Lições
 
 1. **Conhecendo a controladora:** play, volume, crossfader, grave, filtro, load e pré-escuta.
-2. **Primeira transição (troca de grave):** entrada do Deck B em 16 batidas, troca de grave e saída do Deck A.
-3. **Saída com filtro:** filtro abafando o Deck A e corte seco no compasso.
+2. **Primeira transição (troca de grave):** marca o começo da música nova num hot cue, entra em 16 batidas, troca de grave e tira a música antiga.
+3. **Saída com filtro:** filtro abafando a música antiga e corte seco no compasso.
+
+Nas transições o app detecta qual deck está tocando e usa o outro para a música nova
+(o botão **A → B** inverte). Com o **🐢 Sem pressa** ligado (padrão), os passos esperam
+você e o relógio anda em compassos inteiros para sempre sobrar tempo de ler e fazer;
+o cartão também mostra o passo seguinte.
 4. **Modo livre:** log + dicas na hora (graves embolando, entrada sem SYNC, filtro esquecido, crossfader fechando um deck, dois decks no máximo há muito tempo).
 
 ## Como funciona
