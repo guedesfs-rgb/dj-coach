@@ -28,12 +28,19 @@
       <select id="lesson"></select>
       <button id="start">Começar</button>
       <label>BPM <input id="bpm" type="number" value="124" min="60" max="200"></label>
-      <button id="swap" title="Qual deck está tocando → qual vai entrar (clique para inverter)">⇄</button>
-      <button id="relaxed" title="Sem pressa: os passos esperam você">🐢</button>
       <button id="prev" title="Voltar um passo (⌘⇧←)">◀</button>
       <button id="next" title="Pular passo (⌘⇧→)">▶</button>
-      <button id="compact" title="Mostrar/esconder o desenho da controladora">🎛</button>
+      <button id="settings" title="Ajustes">⚙</button>
       <button id="quit" title="Fechar o DJ Coach (⌘⇧Q)">✕</button>
+      <div id="settingsPanel" class="settings">
+        <div>Deck tocando agora:
+          <label><input type="radio" name="playingDeck" value="A"> A</label>
+          <label><input type="radio" name="playingDeck" value="B"> B</label>
+          <small>(o app detecta sozinho; troque se ele errar)</small>
+        </div>
+        <label><input id="relaxedChk" type="checkbox"> Sem pressa: os passos esperam você</label>
+        <label><input id="deviceChk" type="checkbox" checked> Mostrar o desenho da controladora</label>
+      </div>
     </div>
     <div class="row">
       <span id="midi" class="pill">Conectando MIDI…</span>

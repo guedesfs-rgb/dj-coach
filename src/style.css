@@ -36,7 +36,9 @@ main { display: grid; grid-template-columns: 380px 1fr; gap: 16px; padding: 16px
 .hint { color: #cbd2e0; }
 .next { margin-top: 6px; color: var(--mut); font-size: 13px; }
 .next:empty { display: none; }
-#relaxed.on, #swap { border-color: var(--hl); color: var(--hl); }
+.settings { display: none; flex-basis: 100%; flex-direction: column; gap: 6px; padding: 8px 10px; margin-top: 4px; background: #1b2029; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; }
+.settings.open { display: flex; }
+.settings small { color: var(--mut); }
 .meta { margin-top: 10px; min-height: 28px; color: var(--mut); }
 .count { font-size: 22px; font-weight: 800; color: var(--txt); }
 .count.now { color: var(--hl); }

@@ -51,7 +51,7 @@ controladora, dá para testar clicando e arrastando nos controles do desenho.
 3. **Saída com filtro:** filtro abafando a música antiga e corte seco no compasso.
 
 Nas transições o app detecta qual deck está tocando e usa o outro para a música nova
-(o botão **A → B** inverte). Com o **🐢 Sem pressa** ligado (padrão), os passos esperam
+(se ele errar, troque em **⚙ → Deck tocando agora**). Com o **Sem pressa** ligado (padrão, em ⚙), os passos esperam
 você e o relógio anda em compassos inteiros para sempre sobrar tempo de ler e fazer;
 o cartão também mostra o passo seguinte.
 4. **Modo livre:** log + dicas na hora (graves embolando, entrada sem SYNC, filtro esquecido, crossfader fechando um deck, dois decks no máximo há muito tempo).

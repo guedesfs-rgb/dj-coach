@@ -271,7 +271,7 @@ function startLesson(key) {
     L.introText = L.intro(OUT, IN);
     L.dir = OUT;
   } else L.introText = L.intro;
-  $("#swap").textContent = L.build ? `${L.dir} → ${L.dir === "A" ? "B" : "A"}` : "⇄";
+  if (L.build) document.querySelector(`input[name=playingDeck][value=${L.dir}]`).checked = true;
   idx = 0;
   t0 = null;
   for (const k in rampErr) delete rampErr[k];
@@ -367,7 +367,7 @@ function renderStep() {
   document.querySelectorAll(".ctl.hl").forEach((g) => g.classList.remove("hl"));
   arrow.setAttribute("x", -100);
   const s = cur();
-  $("#lessonName").textContent = L ? L.name : "";
+  $("#lessonName").textContent = !L ? "" : L.build ? `${L.name} · Deck ${L.dir} tocando` : L.name;
   if (!L) return;
   if (!s) {
     if (!L.steps.length) {
@@ -530,19 +530,21 @@ const sel = $("#lesson");
 for (const [k, l] of Object.entries(LESSONS)) sel.add(new Option(l.name, k));
 $("#start").onclick = () => { dirOverride = null; startLesson(sel.value); };
 $("#clear").onclick = () => { logEl.innerHTML = ""; lastLog = null; };
-$("#compact").onclick = () => document.body.classList.toggle("compact");
 $("#prev").onclick = prevStep;
-$("#swap").onclick = () => {
-  if (!L || !L.build) return;
-  dirOverride = L.dir === "A" ? "B" : "A";
-  startLesson(sel.value);
+// Ajustes (⚙): deck tocando, sem pressa e desenho da controladora.
+$("#settings").onclick = () => $("#settingsPanel").classList.toggle("open");
+document.querySelectorAll("input[name=playingDeck]").forEach((r) =>
+  r.addEventListener("change", () => {
+    dirOverride = r.value;
+    if (L && L.build) startLesson(sel.value);
+  })
+);
+$("#relaxedChk").checked = relaxed;
+$("#relaxedChk").onchange = () => {
+  relaxed = $("#relaxedChk").checked;
+  log(relaxed ? "Sem pressa: os passos esperam você" : "Modo desafio: os passos passam no tempo", "lesson");
 };
-$("#relaxed").onclick = () => {
-  relaxed = !relaxed;
-  $("#relaxed").classList.toggle("on", relaxed);
-  log(relaxed ? "🐢 Sem pressa: os passos esperam você" : "⏱ Modo desafio: os passos passam no tempo", "lesson");
-};
-$("#relaxed").classList.toggle("on", relaxed);
+$("#deviceChk").onchange = () => document.body.classList.toggle("compact", !$("#deviceChk").checked);
 $("#next").onclick = nextStep;
 document.addEventListener("keydown", (e) => {
   if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;

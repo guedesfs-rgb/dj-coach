@@ -12,12 +12,19 @@
     <span id="midi" class="pill">Conectando MIDI…</span>
     <label>Lição <select id="lesson"></select></label>
     <button id="start">Começar</button>
-    <button id="swap" title="Qual deck está tocando → qual vai entrar (clique para inverter)">⇄</button>
-    <button id="relaxed" title="Sem pressa: os passos esperam você">🐢 Sem pressa</button>
     <button id="prev" title="Voltar um passo (←)">◀ Voltar</button>
     <button id="next" title="Pular passo (→)">Pular ▶</button>
     <label>BPM <input id="bpm" type="number" value="124" min="60" max="200"></label>
-    <button id="compact" title="Esconde a controladora e deixa só a pista e o log">Modo compacto</button>
+    <button id="settings" title="Ajustes">⚙</button>
+    <div id="settingsPanel" class="settings">
+      <div>Deck tocando agora:
+        <label><input type="radio" name="playingDeck" value="A"> A</label>
+        <label><input type="radio" name="playingDeck" value="B"> B</label>
+        <small>(o app detecta sozinho; troque se ele errar)</small>
+      </div>
+      <label><input id="relaxedChk" type="checkbox"> Sem pressa: os passos esperam você</label>
+      <label><input id="deviceChk" type="checkbox" checked> Mostrar o desenho da controladora</label>
+    </div>
   </header>
 
   <main>

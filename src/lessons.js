@@ -29,15 +29,16 @@ const loadStep = (IN) => ({
 });
 
 // Onde começar a música nova: no primeiro bumbo, salvo num HOT CUE.
+// Onde começar a música nova: no primeiro bumbo. Opcional (▶ pula).
 const cueStep = (IN) => ({
-  t: `Marque o começo da música no PAD 1 do ${IN}`,
-  h: `Com o ${IN} parado, gire o JOG até a linha do Serato ficar no primeiro bumbo (onde a onda começa a ter batidas regulares, geralmente no começo da introdução). Aí aperte HOT CUE e depois o PAD 1: o ponto fica salvo, e o PAD 1 sempre volta para ele. Se já tem um hot cue salvo, aperte o PAD 1 para ir até ele.`,
-  hl: [`${IN}.jog`, `${IN}.mode0`, `${IN}.pad1`],
-  c: press(`${IN}.pad1`),
+  t: `Opcional: deixe o ${IN} no primeiro bumbo`,
+  h: `Com o ${IN} parado, gire o JOG até a linha do Serato chegar no primeiro bumbo da música e aperte CUE para marcar. Se a música já está no começo, aperte ▶ aqui no DJ Coach para pular.`,
+  hl: [`${IN}.jog`, `${IN}.cue`],
+  c: (ev) => press(`${IN}.cue`)(ev) || press(`${IN}.pad1`)(ev),
 });
 
 const playStep = (OUT, IN) => ({
-  t: `Aperte PLAY (ou o PAD 1) no ${IN} no começo de uma frase do ${OUT}`,
+  t: `Aperte PLAY no ${IN} no começo de uma frase do ${OUT}`,
   h: `O melhor momento é quando o ${OUT} começa a "esvaziar" (o final, chamado de outro) ou entra num trecho novo. Conte 1-2-3-4 junto com o bumbo e aperte PLAY no "1". A partir daqui o app conta as batidas.`,
   hl: [`${IN}.play`],
   c: (ev) => press(`${IN}.play`)(ev) || press(`${IN}.pad1`)(ev),

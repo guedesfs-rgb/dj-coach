@@ -40,7 +40,7 @@ body.compact .device { display: none; }
 body.browsing #lane, body.browsing .device { opacity: 0.05; }
 body.browsing .logbox { opacity: 0.3; }
 body.browsing .card { bottom: auto; top: 38.5vh; left: 420px; width: 440px; padding: 6px 12px; }
-body.browsing .card > :not(#stepText) { display: none; }
+body.browsing .card > :not(#stepText):not(.bar-top) { display: none; }
 body.browsing .card .big { font-size: 16px; margin: 0; }
 
 /* Mouse em cima de um painel: ele some para você usar o Serato por baixo. */
