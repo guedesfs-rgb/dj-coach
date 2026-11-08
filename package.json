@@ -1,0 +1,25 @@
+{
+  "name": "dj-coach",
+  "productName": "DJ Coach",
+  "version": "0.2.0",
+  "description": "Treinador de mixagem estilo Guitar Hero para a Numark Mixtrack Pro FX + Serato",
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --mac dmg --arm64 --publish never"
+  },
+  "build": {
+    "appId": "com.guedesfs.djcoach",
+    "files": ["electron/**", "src/**", "overlay.html", "index.html"],
+    "mac": {
+      "category": "public.app-category.music",
+      "target": "dmg",
+      "identity": "-"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  }
+}
